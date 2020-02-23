@@ -23,14 +23,7 @@ class CTCipher {
   }
 
   encrypt(text) {
-    const rows = div(text.length, this._keyLen) + 1;
-    const size = rows * this._keyLen;
-    const encoded = new Array(size);
-    for (let i = 0; i < size; ++i) {
-      if (i > text.size) {
-        encoded[i] = "x";
-      }
-    }
+    
   }
 }
 
