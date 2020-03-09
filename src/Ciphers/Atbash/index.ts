@@ -1,17 +1,27 @@
-import { isAlpha } from "../../Utils/helpers";
+import { isAlpha } from "../../Utils/other";
+import { ProtocolCipher } from "../../AbstractCiphers";
 
-class Atbash {
-  _init: string;
-  _cypherMap: Map<string, string>;
-  constructor() {
-    this._init = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    this._cypherMap = this._buildCypher();
+class AtbashCipher extends ProtocolCipher {
+  private initializer: string;
+  private cypherMap: Map<string, string>;
+  private static instance: AtbashCipher;
+  private constructor() {
+    super();
+    this.initializer = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    this.cypherMap = this.buildCypher();
   }
 
-  _buildCypher() {
+  public static getInstance() {
+    if (!AtbashCipher.instance) {
+      AtbashCipher.instance = new AtbashCipher();
+    }
+    return AtbashCipher.instance;
+  }
+
+  private buildCypher() {
     const map = new Map();
 
-    this._init.split("").forEach((char, i, arr) => {
+    this.initializer.split("").forEach((char, i, arr) => {
       map.set(char, arr[25 - i]);
     });
 
@@ -23,7 +33,7 @@ class Atbash {
       .toUpperCase()
       .split("")
       .reduce(
-        (acc, char) => acc + (isAlpha(char) ? this._cypherMap.get(char) : char),
+        (acc, char) => acc + (isAlpha(char) ? this.cypherMap.get(char) : char),
         ""
       );
   }
@@ -33,4 +43,4 @@ class Atbash {
   }
 }
 
-export default Atbash;
+export default AtbashCipher;

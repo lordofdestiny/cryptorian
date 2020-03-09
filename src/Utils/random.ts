@@ -15,3 +15,17 @@ export const randomString = (len: number, source: string) => {
 
   return str.join("");
 };
+
+//Shuffle string characters randomly
+export const randomize = (str: string) => {
+  const newstr = Array.from(str);
+  let p = "";
+  for (let i = str.length - 1; i > -1; --i) {
+    const index = randomInt(0, i);
+    p = newstr[index];
+    newstr[index] = newstr[i];
+    newstr[i] = p;
+  }
+
+  return newstr.join("");
+};

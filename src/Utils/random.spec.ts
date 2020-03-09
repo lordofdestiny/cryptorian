@@ -22,14 +22,27 @@ describe("Random utility functions", () => {
       const len = 10;
       const bits = MyRandom.randomBitSequence(len);
       expect(bits).toEqual(expect.arrayContaining([0, 1]));
-      expect(bits.length).toEqual(len);
+      expect(bits).toHaveLength(len);
     });
   });
   describe("randomString test", () => {
-    test("Should return randomized string", () => {
+    test("Should return random string of given length", () => {
       const len = 5;
       const soruce = "0123456789ABCDEF";
+      const regex = new RegExp(`[${soruce}]*`);
       const rnd = MyRandom.randomString(len, soruce);
+
+      expect(rnd).toHaveLength(len);
+      expect(rnd).toMatch(regex);
+    });
+  });
+  describe("randomize string test", () => {
+    test("Should return randomized string", () => {
+      const str = "Hi, I'm Peter!";
+      const rnd = MyRandom.randomize(str);
+
+      expect(rnd).toHaveLength(str.length);
+      expect(rnd.split("").sort()).toEqual(str.split("").sort());
     });
   });
 });
