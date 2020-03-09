@@ -1,23 +1,24 @@
-const { isAlpha } = require("../../utils/helpers");
+import { isAlpha } from "../../Utils/helpers";
 
 class Atbash {
+  _init: string;
+  _cypherMap: Map<string, string>;
   constructor() {
-    this._init = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    this._init = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     this._cypherMap = this._buildCypher();
-    Object.freeze(this);
   }
 
   _buildCypher() {
     const map = new Map();
 
-    this._init.forEach((char, i, arr) => {
+    this._init.split("").forEach((char, i, arr) => {
       map.set(char, arr[25 - i]);
     });
 
     return map;
   }
 
-  encrypt(text) {
+  encrypt(text: string) {
     return text
       .toUpperCase()
       .split("")
@@ -27,9 +28,9 @@ class Atbash {
       );
   }
 
-  decrypt(text) {
+  decrypt(text: string) {
     return this.encrypt(text);
   }
 }
 
-module.exports = Atbash;
+export default Atbash;

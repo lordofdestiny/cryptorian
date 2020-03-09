@@ -1,12 +1,10 @@
-const {
-  isAlpha,
-  isNum,
-  modularInverse,
-  mathMod
-} = require("../../utils/helpers");
+import { isAlpha, isNum, modularInverse, mathMod } from "../../Utils/helpers";
 
 class Affine {
-  constructor({ a, b }) {
+  _a: number;
+  _b: number;
+  _ami: number;
+  constructor({ a, b }: { a: number; b: number }) {
     const ka = a % 26;
     const ami = modularInverse(ka, 26);
     if (ami == -1) throw new Error(`"a" can not have common factors with 26`);
@@ -44,7 +42,7 @@ class Affine {
     this.b = b;
   }
 
-  _encryptChar(char) {
+  _encryptChar(char: string): string {
     if (isAlpha(char)) {
       const p = char.charCodeAt(0) - 65;
       const x = this._a * p + this._b;
@@ -52,10 +50,9 @@ class Affine {
     } else if (isNum(char)) {
       return this._encryptChar(String.fromCharCode(char.charCodeAt(0) + 17));
     } else return char;
-    // return isAlpha(char) ? String.fromCharCode(mathMod(this._a * (char.charCodeAt(0)- 65 +this._b),26)  + 65) : char;
   }
 
-  _decryptChar(char) {
+  _decryptChar(char: string) {
     return isAlpha(char)
       ? String.fromCharCode(
           mathMod(this._ami * (char.charCodeAt(0) - 65 - this._b), 26) + 65
@@ -63,14 +60,14 @@ class Affine {
       : char;
   }
 
-  encrypt(text) {
+  encrypt(text: string) {
     return text
       .toUpperCase()
       .split("")
       .reduce((acc, char) => acc + this._encryptChar(char), "");
   }
 
-  decrypt(text) {
+  decrypt(text: string) {
     return text
       .toUpperCase()
       .split("")
@@ -78,7 +75,4 @@ class Affine {
   }
 }
 
-module.exports = Affine;
-
-//https://www.geeksforgeeks.org/implementation-affine-cipher/
-//https://stackoverflow.com/questions/54583472/encrypting-decrypting-a-string-using-a-affine-cipher-using-the-original-128-asci
+export default Affine;

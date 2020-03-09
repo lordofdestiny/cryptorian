@@ -1,9 +1,5 @@
 //Hardwerski generator slucajnih brojeva
-const {
-  stateToString,
-  halfArray,
-  nBaseArrayToDecimal
-} = require("../../utils/helpers");
+const { halfArray, nBaseArrayToDecimal } = require("../../utils/helpers");
 
 //do one operation on the register
 function shift(arr, i1, i2) {
@@ -75,18 +71,16 @@ class HRNG {
     } while (!sameState(initState, arr) && !isRepeating);
 
     const finalArr = isRepeating ? halfArray(arr) : feed.slice(0, -1);
-    // const finalState = stateToString(finalArr);
-    // return finalState;
     return finalArr;
   }
 
   _decideResult(sequence, binary, reverse) {
     if (binary && reverse) {
-      return stateToString(sequence.reverse());
+      return sequence.reverse().join("");
     } else if (!binary && reverse) {
       return nBaseArrayToDecimal(sequence.reverse(), 2);
     } else if (binary && !reverse) {
-      return stateToString(sequence);
+      return sequence.join();
     } else {
       return nBaseArrayToDecimal(sequence, 2);
     }
