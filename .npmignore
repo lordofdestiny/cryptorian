@@ -1,4 +1,4 @@
-src/
+src
 jest.config.js
 tsconfig.js
 todo

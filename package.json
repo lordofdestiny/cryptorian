@@ -1,6 +1,6 @@
 {
   "name": "cryptorian",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Library made with Typescript, which provides implementations of classical cryptographic ciphers",
   "main": "/dist/index.js",
   "scripts": {
@@ -10,6 +10,7 @@
     "test": "jest",
     "test:watch": "jest --watchAll"
   },
+  "types": "./dist/index.d.ts",
   "keywords": [],
   "author": "",
   "license": "ISC",
