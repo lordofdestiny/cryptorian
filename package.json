@@ -1,6 +1,6 @@
 {
   "name": "cryptorian",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Library made with Typescript, which provides implementations of classical cryptographic ciphers",
   "main": "./dist/index.js",
   "scripts": {
