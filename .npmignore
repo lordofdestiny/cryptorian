@@ -1,2 +1,4 @@
-lib/
-tests/
+src/
+jest.config.js
+tsconfig.js
+todo
