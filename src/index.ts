@@ -1,4 +1,5 @@
-require("source-map-support").install();
+import sms from "source-map-support";
+sms.install();
 
 export * from "./Ciphers/Affine/index";
 export * from "./Ciphers/Atbash/index";
