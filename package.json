@@ -1,6 +1,6 @@
 {
   "name": "cryptorian",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "Library made with Typescript, which provides implementations of classical cryptographic ciphers",
   "main": "./dist/index.js",
   "scripts": {
@@ -17,14 +17,15 @@
   "keywords": [],
   "author": "Lord of Destiny",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "source-map-support": "^0.5.16"
+  },
   "devDependencies": {
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.0",
     "@types/source-map-support": "^0.5.1",
     "jest": "^25.1.0",
     "ts-jest": "^25.2.1",
-    "typescript": "^3.8.3",
-    "source-map-support": "^0.5.16"
+    "typescript": "^3.8.3"
   }
 }

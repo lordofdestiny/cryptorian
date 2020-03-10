@@ -1,10 +1,16 @@
-import sms from "source-map-support";
-sms.install();
+import "source-map-support/register";
 
-export * from "./Ciphers/Affine/index";
-export * from "./Ciphers/Atbash/index";
-export * from "./Ciphers/Baconian/index";
-export * from "./Ciphers/Ceasar/index";
+import { AffineCipher } from "./Ciphers/Affine/index";
+import { AtbashCipher } from "./Ciphers/Atbash/index";
+import { BaconianCipher } from "./Ciphers/Baconian/index";
+import { CeasarCipher } from "./Ciphers/Ceasar/index";
+
+export default {
+  AffineCipher,
+  AtbashCipher,
+  BaconianCipher,
+  CeasarCipher
+};
 
 // import HRNG from "./ciphers/HRNG/index";
 // import OTP from "./ciphers/OTP/index";
