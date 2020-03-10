@@ -28,7 +28,7 @@ class AtbashCipher extends ProtocolCipher {
     return map;
   }
 
-  encrypt(text: string) {
+  public encrypt(text: string) {
     return text
       .toUpperCase()
       .split("")
@@ -38,7 +38,7 @@ class AtbashCipher extends ProtocolCipher {
       );
   }
 
-  decrypt(text: string) {
+  public decrypt(text: string) {
     return this.encrypt(text);
   }
 }
