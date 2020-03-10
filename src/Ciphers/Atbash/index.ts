@@ -42,3 +42,5 @@ export class AtbashCipher extends ProtocolCipher {
     return this.encrypt(text);
   }
 }
+
+export default AtbashCipher;

@@ -170,3 +170,5 @@ export class BaconianCipher extends KeyCipher {
     return c1 && c2;
   }
 }
+
+export default BaconianCipher;

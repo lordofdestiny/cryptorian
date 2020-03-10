@@ -3,7 +3,7 @@ import { KeyCipher } from "../../AbstractCiphers";
 
 type KeyCeasarCipher = number | string;
 
-export default class CeasarCipher extends KeyCipher {
+export class CeasarCipher extends KeyCipher {
   private userKey: KeyCeasarCipher;
   private workKey: number;
   private static alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -80,3 +80,5 @@ export default class CeasarCipher extends KeyCipher {
     }
   }
 }
+
+export default CeasarCipher;
