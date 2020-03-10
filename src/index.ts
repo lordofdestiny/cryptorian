@@ -1,9 +1,10 @@
-import AffineCipher from "./Ciphers/Affine/index";
+require("source-map-support").install();
 
-import AtbashCipher from "./Ciphers/Atbash/index";
-import BaconianCipher from "./Ciphers/Baconian/index";
+export * from "./Ciphers/Affine/index";
+export * from "./Ciphers/Atbash/index";
+export * from "./Ciphers/Baconian/index";
+export * from "./Ciphers/Ceasar/index";
 
-// import Ceasar from "./ciphers/Ceasar/index";
 // import HRNG from "./ciphers/HRNG/index";
 // import OTP from "./ciphers/OTP/index";
 // import RailFence from "./ciphers/RailFence/index";
@@ -11,9 +12,3 @@ import BaconianCipher from "./Ciphers/Baconian/index";
 // import Polybius from "./ciphers/Polybius/index";
 // import SSCipher from "./ciphers/SSCipher/index";
 // import CTCipher from "./ciphers/CTCipher/index";
-
-export {
-  AffineCipher as Affine,
-  AtbashCipher as Atbash,
-  BaconianCipher as Baconian
-};
