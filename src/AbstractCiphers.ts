@@ -1,21 +1,18 @@
-export interface Key {}
-export interface WorkKey {}
-
 abstract class Cipher {
   abstract encrypt(text: string): string;
   abstract decrypt(text: string): string;
 }
 
 export abstract class KeyCipher extends Cipher {
-  protected validateKey(key: Key): void {
+  protected validateKey(key: object): void {
     return;
   }
-  protected prepareKey(key: Key): WorkKey {
+  protected prepareKey(key: object): object {
     return key;
   }
   abstract encrypt(text: string): string;
   abstract decrypt(text: string): string;
-  abstract isEquivalentKey(key: Key): boolean;
+  abstract isEquivalentKey(key: object): boolean;
 }
 
 export abstract class ProtocolCipher extends Cipher {

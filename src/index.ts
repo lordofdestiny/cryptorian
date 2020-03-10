@@ -1,7 +1,8 @@
 import Affine from "./Ciphers/Affine/index";
 
 import Atbash from "./Ciphers/Atbash/index";
-// import Baconian from "./ciphers/Baconian/index";
+import Baconian from "./ciphers/Baconian/index";
+
 // import Ceasar from "./ciphers/Ceasar/index";
 // import HRNG from "./ciphers/HRNG/index";
 // import OTP from "./ciphers/OTP/index";
@@ -11,4 +12,4 @@ import Atbash from "./Ciphers/Atbash/index";
 // import SSCipher from "./ciphers/SSCipher/index";
 // import CTCipher from "./ciphers/CTCipher/index";
 
-export default { Affine, Atbash };
+export { Affine, Atbash, Baconian };

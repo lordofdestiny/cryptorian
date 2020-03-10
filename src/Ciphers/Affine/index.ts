@@ -1,13 +1,13 @@
-import { KeyCipher, Key, WorkKey, ProtocolCipher } from "../../AbstractCiphers";
+import { KeyCipher, ProtocolCipher } from "../../AbstractCiphers";
 import { isAlpha, isNum } from "../../Utils/other";
 import { modularInverse, mathMod, gcd } from "../../Utils/math";
 
-interface KeyAffineCipher extends Key {
+interface KeyAffineCipher {
   a: number;
   b: number;
 }
 
-interface WorkKeyAffineCipher extends WorkKey {
+interface WorkKeyAffineCipher {
   a: number;
   b: number;
   aModularInverse: number;
