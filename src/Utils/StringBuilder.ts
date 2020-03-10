@@ -1,0 +1,174 @@
+export default class StringBilder {
+  private buffer: Array<string>;
+  private bufferIndex = 0;
+  private stringLength = 0;
+  constructor();
+  constructor(capacity: number);
+  constructor(text: string);
+  constructor(a0?: number | string) {
+    if (a0 === undefined || a0 === null) {
+      this.buffer = new Array(30).fill("\u0000");
+    } else if (typeof a0 === "number") {
+      const bufferCapacity = this.calculateCapacity(a0);
+      this.buffer = new Array(bufferCapacity);
+    } else if (typeof a0 === "string") {
+      const bufferCapacity = this.calculateCapacity(a0.length);
+      this.buffer = new Array(bufferCapacity);
+      this.copyStrToBuffer(a0, 0);
+      this.stringLength = a0.length;
+      this.bufferIndex = a0.length;
+    } else {
+      this.buffer = [];
+    }
+  }
+
+  private calculateCapacity(num: number) {
+    return 2 * num + 2;
+  }
+
+  private copyStrToBuffer(str: string, begin = 0) {
+    for (let i = 0; i < str.length; ++i) {
+      this.buffer[begin + i] = str[i];
+    }
+  }
+
+  public get capacity() {
+    return this.buffer.length;
+  }
+
+  public get length() {
+    return this.stringLength;
+  }
+
+  private setCapacity(capacity: number) {
+    this.buffer.length = capacity;
+  }
+
+  public ensureCapacity(minCapacity: number): void {
+    if (minCapacity > 0) {
+      if (this.capacity < minCapacity) {
+        const newCap = this.calculateCapacity(this.capacity);
+        if (minCapacity > newCap) {
+          this.setCapacity(minCapacity);
+        } else {
+          this.setCapacity(newCap);
+        }
+      }
+    }
+  }
+
+  public setLenght(len: number) {
+    this.ensureCapacity(len);
+    this.stringLength = len;
+    if (len >= this.stringLength) {
+      for (let i = 0; i < len; ++i) {
+        this.buffer[this.bufferIndex + i] = "\u0000";
+      }
+    }
+    this.bufferIndex = len;
+  }
+
+  public append(value: number | bigint | string | any[] | StringBilder) {
+    const text = value.toString();
+    this.ensureCapacity(this.length + text.length);
+    for (let i = 0; i < text.length; ++i) {
+      this.buffer[this.bufferIndex + i] = text[i];
+    }
+    this.bufferIndex += text.length;
+    this.stringLength += text.length;
+  }
+
+  public delete(start = 0, end = this.length) {
+    const cntRmv = end - start;
+    for (let i = start; i < end; ++i) {
+      this.buffer[i] = "";
+    }
+    for (let i = end; i < this.bufferIndex; ++i) {
+      this.buffer[i - cntRmv] = this.buffer[i];
+    }
+    this.bufferIndex -= cntRmv;
+    this.stringLength -= cntRmv;
+  }
+
+  public charAt(index: number) {
+    return this.buffer[index];
+  }
+
+  public deleteCharAt(index: number) {
+    this.delete(index, index + 1);
+  }
+
+  public indexOf(char: string) {
+    if (char.length > 1) {
+      throw new Error("Argument must be of length 1");
+    } else {
+      return this.buffer.indexOf(char);
+    }
+  }
+
+  public lastIndexOf(char: string) {
+    if (char.length > 1) {
+      throw new Error("Argument must be of length 1");
+    } else {
+      return this.buffer.lastIndexOf(char);
+    }
+  }
+
+  public replace(start: number, end: number, str: string) {
+    end = Math.min(end, this.bufferIndex);
+    const count = end - start;
+    const newSize = this.length + str.length - count;
+    this.ensureCapacity(newSize);
+    if (end > end) {
+      throw new Error('"start" must me smaller than "end"');
+    } else if (start < 0 || end < 0) {
+      throw new Error('"start" and "end" must be positive');
+    } else {
+      const keep = this.buffer.slice(end, this.bufferIndex);
+      for (let i = 0; i < count; ++i) {
+        this.buffer[start + i] = str[i];
+      }
+      for (let i = 0; i < keep.length; ++i) {
+        this.buffer[end + i] = keep[i];
+      }
+      this.bufferIndex = newSize;
+      this.stringLength = newSize;
+    }
+  }
+
+  public reverse() {
+    for (let i = 0; i < this.bufferIndex / 2; ++i) {
+      const symInd = this.bufferIndex - 1 - i;
+      const s = this.buffer[i];
+      this.buffer[i] = this.buffer[symInd];
+      this.buffer[symInd] = s;
+    }
+  }
+
+  public setCharAt(index: number, chr: string) {
+    if (chr.length > 1) {
+      throw new Error("Argument must be of length 1");
+    } else {
+      this.buffer[index] = chr;
+    }
+  }
+
+  public substring(index: number) {
+    if (index < 0 || index > this.bufferIndex) {
+      throw new Error("Index out of bounds of builder");
+    } else {
+      return this.buffer.slice(index, this.stringLength).join("");
+    }
+  }
+
+  public toString() {
+    return this.substring(0);
+  }
+
+  public trimToSize() {
+    const required = this.calculateCapacity(this.length);
+    if (this.capacity > required) {
+      this.setCapacity(required);
+    }
+  }
+}
