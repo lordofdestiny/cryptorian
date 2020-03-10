@@ -1,4 +1,4 @@
-import AtbashCipher from "./index";
+import { AtbashCipher } from "./index";
 import "../../jestModule";
 
 describe("Atbash Cipher Class tests", () => {

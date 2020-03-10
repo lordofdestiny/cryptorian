@@ -1,4 +1,4 @@
-import AffineCipher from "./index";
+import { AffineCipher } from "./index";
 import "../../jestModule";
 
 describe("Affine Cipher Class tests", () => {

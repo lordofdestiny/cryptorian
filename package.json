@@ -1,6 +1,6 @@
 {
   "name": "cryptorian",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Library made with Typescript, which provides implementations of classical cryptographic ciphers",
   "main": "./dist/index.js",
   "scripts": {
@@ -8,6 +8,10 @@
     "build:watch": "tsc -w",
     "test": "jest",
     "test:watch": "jest --watchAll"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lordofdestiny/cryptorian.git"
   },
   "types": "./dist/index.d.ts",
   "keywords": [],

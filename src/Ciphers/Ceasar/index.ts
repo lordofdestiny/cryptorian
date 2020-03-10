@@ -80,5 +80,3 @@ export class CeasarCipher extends KeyCipher {
     }
   }
 }
-
-export default CeasarCipher;
