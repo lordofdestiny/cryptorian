@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "preserveConstEnums": true,
+    "target": "es5",
+    "lib": ["ESNext"],
+    "module": "CommonJS",
+    "outDir": "./dist",
     "moduleResolution": "node",
+    "preserveConstEnums": true,
     "removeComments": true,
     "declaration": true,
-    "outDir": "./dist",
-    "module": "CommonJS",
-    "sourceMap": true,
-    "lib": ["ESNext"],
-    "target": "es5",
+    "inlineSourceMap": true,
     "strict": true,
     "esModuleInterop": true
   },
