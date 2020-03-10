@@ -5,12 +5,7 @@ import { AtbashCipher } from "./Ciphers/Atbash/index";
 import { BaconianCipher } from "./Ciphers/Baconian/index";
 import { CeasarCipher } from "./Ciphers/Ceasar/index";
 
-export default {
-  AffineCipher,
-  AtbashCipher,
-  BaconianCipher,
-  CeasarCipher
-};
+export { AffineCipher, AtbashCipher, BaconianCipher, CeasarCipher };
 
 // import HRNG from "./ciphers/HRNG/index";
 // import OTP from "./ciphers/OTP/index";
