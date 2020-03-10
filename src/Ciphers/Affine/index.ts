@@ -1,4 +1,4 @@
-import {  ProtocolCipher } from "../../AbstractCiphers";
+import { ProtocolCipher } from "../../AbstractCiphers";
 import { isAlpha, isNum } from "../../Utils/other";
 import { modularInverse, mathMod, gcd } from "../../Utils/math";
 
@@ -13,7 +13,7 @@ interface WorkKeyAffineCipher {
   aModularInverse: number;
 }
 
-class AffineCipher extends ProtocolCipher {
+export class AffineCipher extends ProtocolCipher {
   private userKey: KeyAffineCipher;
   private workingKey: WorkKeyAffineCipher;
   constructor(key: KeyAffineCipher) {
@@ -94,5 +94,3 @@ class AffineCipher extends ProtocolCipher {
     return c1 && c2;
   }
 }
-
-export default AffineCipher;

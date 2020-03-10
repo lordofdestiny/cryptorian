@@ -1,10 +1,9 @@
 {
   "name": "cryptorian",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Library made with Typescript, which provides implementations of classical cryptographic ciphers",
   "main": "./dist/index.js",
   "scripts": {
-    "prepublish": "npm run build",
     "build": "tsc",
     "build:watch": "tsc -w",
     "test": "jest",

@@ -10,7 +10,7 @@ interface CodeBaconianCipher {
 
 type CipherTextValidator = (text: string) => boolean;
 
-class BaconianCipher extends KeyCipher {
+export class BaconianCipher extends KeyCipher {
   private code: CodeBaconianCipher;
   private workingCode: CodeBaconianCipher;
   private validateCipherText: CipherTextValidator;
@@ -170,5 +170,3 @@ class BaconianCipher extends KeyCipher {
     return c1 && c2;
   }
 }
-
-export default BaconianCipher;

@@ -1,7 +1,7 @@
 import { isAlpha } from "../../Utils/other";
 import { ProtocolCipher } from "../../AbstractCiphers";
 
-class AtbashCipher extends ProtocolCipher {
+export class AtbashCipher extends ProtocolCipher {
   private initializer: string;
   private cypherMap: Map<string, string>;
   private static instance: AtbashCipher;
@@ -42,5 +42,3 @@ class AtbashCipher extends ProtocolCipher {
     return this.encrypt(text);
   }
 }
-
-export default AtbashCipher;
