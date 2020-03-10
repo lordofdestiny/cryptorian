@@ -1,5 +1,4 @@
-import BaconianCipher from "./index";
-
+import { BaconianCipher } from "./index";
 import "../../jestModule";
 
 describe("Baconian cipher test", () => {

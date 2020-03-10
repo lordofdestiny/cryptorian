@@ -1,4 +1,4 @@
-import CeasarCipher from "./index";
+import { CeasarCipher } from "./index";
 import "../../jestModule";
 
 describe("Ceasar Cipher Class tests", () => {

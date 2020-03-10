@@ -94,5 +94,3 @@ export class AffineCipher extends ProtocolCipher {
     return c1 && c2;
   }
 }
-
-export default AffineCipher;
