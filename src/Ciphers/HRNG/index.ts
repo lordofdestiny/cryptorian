@@ -1,10 +1,11 @@
 //Hardwerski generator slucajnih brojeva
-const { halfArray, nBaseArrayToDecimal } = require("../../utils/helpers");
+import { halfArray, nBaseArrayToDecimal } from "../../Utils/other";
+import StringBilder from "../../Utils/StringBuilder";
 
 //do one operation on the register
-function shift(arr, i1, i2) {
+function shift(arr: number[], i1: number, i2: number) {
   //1. generate new bit from output pins i1 and i2
-  const newFirst = arr[i1] ^ arr[i2];
+  const newFirst = (arr[i1] ^ arr[i2]) % 2;
   //2. push it to the front of the register ( array )
   arr.unshift(newFirst);
   //3. Pop last value from register (delte it from array )
@@ -14,7 +15,7 @@ function shift(arr, i1, i2) {
 }
 
 //Check if given state array is sequence repeated twice
-function sequenceRepeatedTwice(feed) {
+function sequenceRepeatedTwice(feed: number[]) {
   //Since it's checking if it's repeated twice, it should always be even
   if (feed.length % 2 == 1) return false;
   //Find half of the length
@@ -29,7 +30,7 @@ function sequenceRepeatedTwice(feed) {
   return true;
 }
 
-function sameState(arr1, arr2) {
+function sameState(arr1: number[], arr2: number[]) {
   if (arr1.length != arr2.length) return false;
   const l = arr1.length;
   let i = 0;
@@ -46,16 +47,17 @@ function sameState(arr1, arr2) {
   return same;
 }
 
-class HRNG {
-  constructor(size, p1, p2) {
+export class HRNG {
+  private pins: { pin1: number; pin2: number };
+  private size: number;
+  constructor(size: number, p1: number, p2: number) {
     this.size = size;
     if (p1 > p2) [p1, p2] = [p2, p1];
-    this.pin1 = p1;
-    this.pin2 = p2;
+    this.pins = { pin1: p1, pin2: p2 };
   }
 
   //Base function for generating random binary sequnce
-  _generate(arr) {
+  _generate(arr: number[]) {
     //Save initial state
     const initState = arr.slice(0);
     //Array to save output too
@@ -64,7 +66,7 @@ class HRNG {
 
     do {
       //Preform one register operation
-      const output = shift(arr, this.pin1, this.pin2);
+      const output = shift(arr, this.pins.pin1, this.pins.pin2);
       //Save ouput to the feed
       feed.push(output);
       isRepeating = sequenceRepeatedTwice(feed);
@@ -74,7 +76,7 @@ class HRNG {
     return finalArr;
   }
 
-  _decideResult(sequence, binary, reverse) {
+  _decideResult(sequence: number[], binary: boolean, reverse: boolean) {
     if (binary && reverse) {
       return sequence.reverse().join("");
     } else if (!binary && reverse) {
@@ -89,7 +91,7 @@ class HRNG {
   //Generate a number without changing register state
   // binary argument means does function return result as binary or as decimal number ( def )
   //Reverse argument menas is sequence recersed before return
-  generate(arr, binary = false, reverse = true) {
+  generate(arr: number[], binary = false, reverse = true) {
     if (arr.length > this.size) {
       throw new Error("Sequence must me same length as generator  size!");
     }
@@ -98,17 +100,18 @@ class HRNG {
   }
 
   drawHRNG() {
+    const string = new StringBilder(50 * this.size);
     //A middle possition between 2 input pins from register
-    const cmid = Math.floor(((this.pin2 - this.pin1 + 1) * 5) / 2);
+    const cmid = Math.floor(((this.pins.pin2 - this.pins.pin1 + 1) * 5) / 2);
     //A middle possition relative to first pin
-    const c = this.pin1 * 5 + cmid;
+    const c = this.pins.pin1 * 5 + cmid;
     //Indenrtaion for wire
     const ind = -5;
 
     //Write top edge of register
     for (let i = -5; i < 5 * this.size + 1; i++)
-      process.stdout.write(i >= 0 ? "-" : " ");
-    console.log();
+      string.append(i >= 0 ? "-" : " ");
+    string.append("\n");
 
     //Draw the middle part of register
     for (let i = 0; i < 3; i++) {
@@ -117,16 +120,16 @@ class HRNG {
         for (let j = ind; j < 5 * this.size + 1; j++) {
           if (j < -1) {
             //Draw wire comming into register
-            process.stdout.write("-");
+            string.append("-");
           } else if (j == -1) {
             //Draw connection arrow
-            process.stdout.write(">");
+            string.append(">");
           } else if (j % 5 == 0) {
             //Draw horizontal lines
-            process.stdout.write("|");
+            string.append("|");
           } else {
             //Pad spaces
-            process.stdout.write(" ");
+            string.append(" ");
           }
         }
       }
@@ -135,88 +138,88 @@ class HRNG {
         for (let j = ind; j < 5 * this.size + 1; j++) {
           if (j != ind && j % 5 == 0 && i == 0) {
             //Draw first row
-            process.stdout.write("|");
+            string.append("|");
           } else if (j % 5 == 0 && i == 2) {
             //Draw third row
-            process.stdout.write("|");
+            string.append("|");
           } else {
             //Fill spaces
-            process.stdout.write(" ");
+            string.append(" ");
           }
         }
       }
-      console.log();
+      string.append("\n");
     }
 
     //Draw bottom edge of register
     for (let i = ind; i < 5 * this.size + 1; i++) {
       if (i == ind) {
         //Draw wire at edge of image
-        process.stdout.write("|");
+        string.append("|");
       } else if (i >= 0) {
         //Draw bottom line of register
-        process.stdout.write("-");
+        string.append("-");
       } else {
         //Fill spaces
-        process.stdout.write(" ");
+        string.append(" ");
       }
     }
-    console.log();
+    string.append("\n");
 
     //Draw wires comming out of register and edge wire
     for (let i = 0; i < 2; i++) {
       for (let j = ind; j < 5 * this.size + 1; j++) {
         //Draw indented part
         if (j < 0) {
-          process.stdout.write(j == ind ? "|" : " ");
-        } else if (j == this.pin1 * 5 + 3 || j == this.pin2 * 5 + 2) {
+          string.append(j == ind ? "|" : " ");
+        } else if (j == this.pins.pin1 * 5 + 3 || j == this.pins.pin2 * 5 + 2) {
           //Draw wires comming out of register
-          process.stdout.write("|");
+          string.append("|");
         } else if (i == 1 && j >= c - 1 && j <= c + 1) {
           //Draw top of xor circuit
-          process.stdout.write("-");
+          string.append("-");
         } else {
           //Fill spaces
-          process.stdout.write(" ");
+          string.append(" ");
         }
       }
-      console.log();
+      string.append("\n");
     }
 
     //Draw middle of xor circuit and wire comming out of it
     for (let i = ind; i < 5 * this.size + 1; i++) {
       if (i == ind) {
         //Draw edge wire
-        process.stdout.write("|");
+        string.append("|");
       } else if (i == ind + 1) {
         //Draw arrow
-        process.stdout.write("<");
-      } else if (i <= this.pin2 * 5 + 2) {
+        string.append("<");
+      } else if (i <= this.pins.pin2 * 5 + 2) {
         //Draw line only until the right out pin
         //draw rest
         if (i == c) {
           // In the middle between pins
-          process.stdout.write("+");
+          string.append("+");
         } else if (i == c - 1 || i == c + 1) {
           //Left and right of the middle
-          process.stdout.write("|");
+          string.append("|");
         } else {
           //Rest is wire
-          process.stdout.write("-");
+          string.append("-");
         }
       } else {
         //Fill spaces
-        process.stdout.write(" ");
+        string.append(" ");
       }
     }
-    console.log();
+    string.append("\n");
 
     //draw bottom part of xor circuit
     for (let i = ind; i < 5 * this.size + 1; i++) {
-      process.stdout.write(i >= c - 1 && i <= c + 1 ? "-" : " ");
+      string.append(i >= c - 1 && i <= c + 1 ? "-" : " ");
     }
-    console.log();
+    string.append("\n");
+
+    return string.toString();
   }
 }
-
-module.exports = HRNG;
