@@ -1,3 +1,4 @@
 jest.config.js
 tsconfig.js
 todo
+*.spec.ts
