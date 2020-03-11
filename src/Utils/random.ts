@@ -17,7 +17,7 @@ export const randomString = (len: number, source: string) => {
 };
 
 //Shuffle string characters randomly
-export const randomize = (str: string) => {
+export const randomizeString = (str: string) => {
   const newstr = Array.from(str);
   let p = "";
   for (let i = str.length - 1; i > -1; --i) {

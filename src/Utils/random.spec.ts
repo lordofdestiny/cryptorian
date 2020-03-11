@@ -39,7 +39,7 @@ describe("Random utility functions", () => {
   describe("randomize string test", () => {
     test("Should return randomized string", () => {
       const str = "Hi, I'm Peter!";
-      const rnd = MyRandom.randomize(str);
+      const rnd = MyRandom.randomizeString(str);
 
       expect(rnd).toHaveLength(str.length);
       expect(rnd.split("").sort()).toEqual(str.split("").sort());
