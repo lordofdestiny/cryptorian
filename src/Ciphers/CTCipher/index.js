@@ -1,5 +1,8 @@
 const { div } = require("../../utils/helpers");
 
+/**
+ * Implementation of Columnal Transposition Cipher
+ */
 class CTCipher {
   constructor(key) {
     this._key = CTCipher._checkKey(key);
@@ -22,9 +25,7 @@ class CTCipher {
     }
   }
 
-  encrypt(text) {
-    
-  }
+  encrypt(text) {}
 }
 
 module.exports = CTCipher;
