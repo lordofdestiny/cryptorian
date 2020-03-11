@@ -2,7 +2,7 @@ import { CeasarCipher } from "./index";
 import "../../jestModule";
 
 describe("Ceasar Cipher Class tests", () => {
-  test.each([[-1], [""]])("It, should throw for invalid a = %i", key => {
+  test.each([[-1], [""]])("Should throw for invalid a = %i", key => {
     expect(() => {
       new CeasarCipher(key);
     }).toThrow();
