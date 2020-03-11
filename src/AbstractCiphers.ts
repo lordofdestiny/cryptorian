@@ -1,6 +1,6 @@
-abstract class Cipher {
-  abstract encrypt(text: string): string;
-  abstract decrypt(text: string): string;
+export abstract class Cipher {
+  abstract encrypt(text: string): any;
+  abstract decrypt(text: string): any;
 }
 
 export abstract class KeyCipher extends Cipher {
