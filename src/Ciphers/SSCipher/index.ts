@@ -10,6 +10,9 @@ type Pair = [string, string];
 
 type CodeMap = Map<string, string>;
 
+/**
+ * Implementation of simple substitution cipher
+ */
 export class SSCipher extends KeyCipher {
   private userKey: string;
   private workKey: WorkKeySSCpiher;
@@ -51,6 +54,9 @@ export class SSCipher extends KeyCipher {
     return { encoder: new Map(encoder), decoder: new Map(decoder) };
   }
 
+  /**
+   * Handles both encryption and decryption based on CodeMap passed
+   */
   private static cryptHelper(text: string, map: CodeMap) {
     const array = new Array(text.length);
     for (let i = 0; i < text.length; ++i) {
