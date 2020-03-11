@@ -1,52 +1,68 @@
 import { KeyCipher } from "../../AbstractCiphers";
 import { div, binaryDivision } from "../../Utils/math";
-import { isAlpha } from "../../Utils/other";
 import { isArray } from "util";
 
-interface CodeBaconianCipher {
+/**
+ *
+ * Interface describing states of Baconian Cipher
+ */
+interface ICodeBaconianCipher {
   offState: string;
   onState: string;
 }
 
+/**
+ * Type for function that checks if cipher text is valid
+ */
 type CipherTextValidator = (text: string) => boolean;
 
+/**
+ * Implementation of Baconian cipher
+ */
 export class BaconianCipher extends KeyCipher {
-  private code: CodeBaconianCipher;
-  private workingCode: CodeBaconianCipher;
+  private code: ICodeBaconianCipher;
   private validateCipherText: CipherTextValidator;
   private cipherMap: Map<string, string>;
   private strict: boolean;
-  constructor(code: CodeBaconianCipher, strict = true) {
+  constructor(code: ICodeBaconianCipher, strict = true) {
     super();
     this.ckeckKey(code);
-    this.code = code;
-    this.workingCode = this.prepareKey(code);
+    this.code = this.prepareKey(code);
     this.cipherMap = BaconianCipher.buildCipherMap(this.code);
     this.validateCipherText = BaconianCipher.buildFomatChecker(this.code);
     this.strict = strict;
   }
 
-  get isStatic() {
+  /**
+   * whether or not cipher is in strict decryption mode
+   */
+  isStrict() {
     return this.strict;
   }
 
-  set isStatic(staic: boolean) {
-    this.strict = staic;
+  /**
+   * Sets strict mode on/off
+   */
+  setStrict(strict: boolean) {
+    this.strict = strict;
   }
 
-  get binaryCode() {
+  get codeStates() {
     return this.code;
   }
 
-  set binaryCode(code: CodeBaconianCipher) {
+  set codeStates(code: ICodeBaconianCipher) {
     this.ckeckKey(code);
-    this.code = code;
-    this.workingCode = this.prepareKey(code);
+    this.code = this.prepareKey(code);
     this.cipherMap = BaconianCipher.buildCipherMap(this.code);
     this.validateCipherText = BaconianCipher.buildFomatChecker(this.code);
   }
 
-  protected ckeckKey(code: CodeBaconianCipher): void {
+  /**
+   * Validates wether codeStates are  valid
+   *
+   */
+  protected ckeckKey(code: ICodeBaconianCipher): void {
     if (code.offState.length < 1 || code.onState.length < 1) {
       throw new Error(
         "Both offState and onState must have a length of 1 or more"
@@ -54,33 +70,30 @@ export class BaconianCipher extends KeyCipher {
     }
   }
 
-  protected prepareKey(code: CodeBaconianCipher) {
-    return {
-      onState: code.onState[0],
-      offState: code.offState[0]
-    };
+  /**
+   * Implemented because of KeyCipher Abstract class
+   */
+  protected prepareKey(code: ICodeBaconianCipher) {
+    return code;
   }
 
+  /**
+   * Returns a function that validates cipher text
+   */
   private static buildFomatChecker(
-    code: CodeBaconianCipher
+    code: ICodeBaconianCipher
   ): CipherTextValidator {
     const { offState: on, onState: off } = code;
     const regex = new RegExp(`^[${off}${on}]+$`, "gi");
     return (text: string) => !!text.match(regex);
   }
 
-  private static constructAlphabeth() {
-    function* alphabethGenerator() {
-      for (let i = 0; i < 26; i++) {
-        yield String.fromCharCode(65 + i);
-      }
-    }
-    return Array.from(alphabethGenerator());
-  }
-
+  /**
+   * Convert a number of base 10 to binary using code states instead of 0 & 1
+   */
   private static convertToBinary(
     num: number,
-    code: CodeBaconianCipher
+    code: ICodeBaconianCipher
   ): string {
     const { offState, onState } = code;
     const digit: string = num % 2 == 0 ? offState : onState;
@@ -91,12 +104,19 @@ export class BaconianCipher extends KeyCipher {
     }
   }
 
-  static makeBinaryCode(num: number, code: CodeBaconianCipher) {
+  /**
+   * Converts a alphabet charachter index to binary and pads it to 5 digits
+   */
+  private static makeBinaryCode(num: number, code: ICodeBaconianCipher) {
     const binaryCode = BaconianCipher.convertToBinary(num, code);
     return binaryCode.padStart(5, code.offState);
   }
 
-  static constructBinaryAlphabeth(code: CodeBaconianCipher) {
+  /**
+   *
+   * Generates an array of binary representations of alphabet charachter positions
+   */
+  private static constructBinaryAlphabeth(code: ICodeBaconianCipher) {
     function* binaryAlphabethGenerator() {
       for (let i = 0; i < 26; i++) {
         yield BaconianCipher.makeBinaryCode(i, code);
@@ -105,8 +125,12 @@ export class BaconianCipher extends KeyCipher {
     return Array.from(binaryAlphabethGenerator());
   }
 
-  private static buildCipherMap(code: CodeBaconianCipher) {
-    const alphabeth = BaconianCipher.constructAlphabeth();
+  /**
+   * Creates a map for enctyption/decryption
+   *
+   */
+  private static buildCipherMap(code: ICodeBaconianCipher) {
+    const alphabeth = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     const binaryAlphabeth = BaconianCipher.constructBinaryAlphabeth(code);
     const map = new Map();
 
@@ -118,6 +142,9 @@ export class BaconianCipher extends KeyCipher {
     return map;
   }
 
+  /**
+   * Checks if text only conatins spaces and letters
+   */
   private validatePlainText(text: string) {
     return !!text.match(/^[\sA-Z]+$/gi);
   }
@@ -164,9 +191,12 @@ export class BaconianCipher extends KeyCipher {
     return decrypted;
   }
 
-  public isEquivalentKey(code: CodeBaconianCipher) {
-    const c1 = this.workingCode.offState === code.offState[0];
-    const c2 = this.workingCode.onState === code.onState[0];
+  /**
+   * Ensures that passed code is equivalent to one that instance is using
+   */
+  public isEquivalentKey(code: ICodeBaconianCipher) {
+    const c1 = this.code.offState === code.offState[0];
+    const c2 = this.code.onState === code.onState[0];
     return c1 && c2;
   }
 }
