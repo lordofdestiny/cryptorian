@@ -1,35 +1,49 @@
 import { ProtocolCipher } from "../../AbstractCiphers";
 import { isAlpha, isNum } from "../../Utils/other";
 import { modularInverse, mathMod, gcd } from "../../Utils/math";
+import StringBilder from "../../Utils/StringBuilder";
 
-interface KeyAffineCipher {
+/**
+ * Format of Key that user passes
+ */
+interface IKeyAffineCipher {
   a: number;
   b: number;
 }
 
-interface WorkKeyAffineCipher {
-  a: number;
-  b: number;
+/**
+ * Fomrat of Key that is used by the class
+ */
+interface IWorkKeyAffineCipher extends IKeyAffineCipher {
   aModularInverse: number;
 }
 
+/**
+ * Implementation of Affine cipher
+ */
 export class AffineCipher extends ProtocolCipher {
-  private userKey: KeyAffineCipher;
-  private workingKey: WorkKeyAffineCipher;
-  constructor(key: KeyAffineCipher) {
+  private userKey: IKeyAffineCipher;
+  private workingKey: IWorkKeyAffineCipher;
+  constructor(key: IKeyAffineCipher) {
     super();
     AffineCipher.validateKey(key);
     this.userKey = key;
     this.workingKey = AffineCipher.prepareKey(key);
   }
 
-  private static validateKey(key: KeyAffineCipher): void {
+  /**
+   * Validates that passed key matches criteria
+   */
+  private static validateKey(key: IKeyAffineCipher): void {
     if (gcd(key.a, 26) != 1) {
       throw new Error("Value of a must not have common factors with 26!");
     }
   }
 
-  private static prepareKey(key: KeyAffineCipher): WorkKeyAffineCipher {
+  /**
+   * Creates workKey from userKey
+   */
+  private static prepareKey(key: IKeyAffineCipher): IWorkKeyAffineCipher {
     const a = mathMod(key.a, 26);
     const b = mathMod(key.b, 26);
     const aModularInverse = modularInverse(a, 26);
@@ -40,16 +54,19 @@ export class AffineCipher extends ProtocolCipher {
     };
   }
 
-  public get key(): KeyAffineCipher {
+  public get key(): IKeyAffineCipher {
     return this.userKey;
   }
 
-  public set key(key: KeyAffineCipher) {
+  public set key(key: IKeyAffineCipher) {
     AffineCipher.validateKey(key);
     this.userKey = key;
     this.workingKey = AffineCipher.prepareKey(key);
   }
 
+  /**
+   * Abstraction of encrypitng a single charachter
+   */
   private encryptChar(char: string): string {
     if (isAlpha(char)) {
       const { a, b } = this.workingKey;
@@ -63,6 +80,9 @@ export class AffineCipher extends ProtocolCipher {
     }
   }
 
+  /**
+   * Abstraction of dectypting a single charachter
+   */
   private decryptChar(char: string): string {
     const { b, aModularInverse } = this.workingKey;
     if (isAlpha(char)) {
@@ -75,20 +95,27 @@ export class AffineCipher extends ProtocolCipher {
   }
 
   public encrypt(text: string): string {
-    return text
-      .toUpperCase()
-      .split("")
-      .reduce((acc, char) => acc + this.encryptChar(char), "");
+    const buffer = new StringBilder(text.length);
+    for (const char of text) {
+      buffer.append(this.encryptChar(char.toUpperCase()));
+    }
+
+    return buffer.toString();
   }
 
   public decrypt(text: string) {
-    return text
-      .toUpperCase()
-      .split("")
-      .reduce((acc, char) => acc + this.decryptChar(char), "");
+    const buffer = new StringBilder(text.length);
+    for (const char of text) {
+      buffer.append(this.decryptChar(char.toUpperCase()));
+    }
+
+    return buffer.toString();
   }
 
-  public isEquivalentKey(key: KeyAffineCipher): boolean {
+  /**
+   * Checks if current and passed key result in same encryption
+   */
+  public isEquivalentKey(key: IKeyAffineCipher): boolean {
     const c1 = key.a % 26 === this.workingKey.a;
     const c2 = key.b % 26 === this.workingKey.b;
     return c1 && c2;

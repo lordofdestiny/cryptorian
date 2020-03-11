@@ -2,10 +2,12 @@ import { AffineCipher } from "./index";
 import "../../jestModule";
 
 describe("Affine Cipher Class tests", () => {
-  test.each([8, 4, 13, 26])("It should throw for invalid a = %i", a => {
-    expect(() => {
-      new AffineCipher({ a, b: 2 });
-    }).toThrow();
+  describe("Should fail creating an instance", () => {
+    test.each([8, 4, 13, 26])("a = %i", a => {
+      expect(() => {
+        new AffineCipher({ a, b: 2 });
+      }).toThrow();
+    });
   });
   test("Should create class instance", () => {
     expect(() => {
@@ -14,12 +16,12 @@ describe("Affine Cipher Class tests", () => {
     });
   });
   test("Try getting and setting a key", () => {
-    const key = { a: 7, b: 12 };
+    let key = { a: 7, b: 12 };
     const affine = new AffineCipher(key);
     expect(affine.key).toEqual(key);
-    const key2 = { a: 9, b: 2 };
-    affine.key = key2;
-    expect(affine.key).toEqual(key2);
+    key = { a: 9, b: 2 };
+    affine.key = key;
+    expect(affine.key).toEqual(key);
   });
   test("Check are keys equivalent", () => {
     const affine = new AffineCipher({ a: 3, b: 1 });
