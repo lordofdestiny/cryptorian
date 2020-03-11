@@ -164,9 +164,19 @@ export default class StringBilder {
   public setCharAt(index: number, chr: string) {
     if (chr.length > 1) {
       throw new Error("Argument must be of length 1");
+    } else if (index > this.bufferIndex) {
+      throw new Error("Index of out bounds of buffer");
     } else {
       this.buffer[index] = chr;
     }
+    return this;
+  }
+
+  public setCharCodeAt(index: number, charCode: number) {
+    if (index > this.bufferIndex) {
+      throw new Error("Index of out bounds of buffer");
+    }
+    this.buffer[index] = String.fromCharCode(charCode);
     return this;
   }
 
