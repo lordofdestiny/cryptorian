@@ -5,6 +5,9 @@ declare global {
     interface Matchers<R, T> {
       toEqualOneOf(...values: T[]): R;
       toBeInRange(min: number, max: number, inclusive?: boolean): R;
+      toBeNan(): R;
+      toBeString(): R;
+      toBeArray(): R;
     }
   }
 }
@@ -12,17 +15,13 @@ declare global {
 expect.extend({
   toEqualOneOf(received, ...values) {
     const pass = values.find(value => value === received) !== -1;
-    if (pass) {
-      return {
-        message: () => `expected ${received} not to be one of ${values}`,
-        pass: true
-      };
-    } else {
-      return {
-        message: () => `expected ${received} to be one of ${values}`,
-        pass: false
-      };
-    }
+    const msg = `expected ${received}${
+      pass ? "" : " not"
+    } to be one of ${values}`;
+    return {
+      message: () => msg,
+      pass
+    };
   },
   toBeInRange(received, min, max, inclusive = true) {
     const pass = inclusive
@@ -31,30 +30,42 @@ expect.extend({
     const range = `${inclusive ? "[" : "("}${min}, ${max}${
       inclusive ? "]" : ")"
     }`;
-    if (pass) {
-      return {
-        message: () => `expected ${received} not to be in range ${range}`,
-        pass: true
-      };
-    } else {
-      return {
-        message: () => `expected ${received} to be in range ${range}`,
-        pass: false
-      };
-    }
+
+    const msg = `expected ${received}${
+      pass ? "" : " not"
+    } to be in range ${range}`;
+
+    return {
+      message: () => msg,
+      pass
+    };
   },
   toBeNan(received) {
     const pass = isNaN(received);
-    if (pass) {
-      return {
-        message: () => `expected ${received} not to be NaN`,
-        pass: true
-      };
-    } else {
-      return {
-        message: () => `expected ${received} to be NaN`,
-        pass: false
-      };
-    }
+    const msg = `expected ${received}${pass ? "" : " not"} to be NaN`;
+    return {
+      message: () => msg,
+      pass
+    };
+  },
+  toBeString(received) {
+    const pass = typeof received === "string";
+    const msg = `expected ${received}${
+      pass ? "" : " not"
+    } to be of type string`;
+    return {
+      message: () => msg,
+      pass
+    };
+  },
+  toBeArray(received) {
+    const pass = Array.isArray(received);
+    const msg = `expected ${received}${
+      pass ? "" : " not"
+    } to be instance of Array`;
+    return {
+      message: () => msg,
+      pass
+    };
   }
 });
