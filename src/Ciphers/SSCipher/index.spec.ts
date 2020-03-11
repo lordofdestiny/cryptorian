@@ -1,5 +1,5 @@
 import { SSCipher } from "./index";
-import { randomize } from "../../Utils/random";
+import { randomizeString } from "../../Utils/random";
 import "../../jestModule";
 
 describe("Simple substitution cipher test", () => {
@@ -18,7 +18,7 @@ describe("Simple substitution cipher test", () => {
     });
   });
   test("Should correctly encode & decode", () => {
-    const key = randomize("yzabcdklpnoqrstemhijuvwxfg");
+    const key = randomizeString("yzabcdklpnoqrstemhijuvwxfg");
     const text = "This is text i want to encrypt";
     const ssc = new SSCipher(key);
     const enc = ssc.encrypt(text);
