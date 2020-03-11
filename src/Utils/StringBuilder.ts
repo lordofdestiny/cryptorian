@@ -1,3 +1,7 @@
+/**
+ * Implementation of StringBuilder. It optimizes basic string operations
+ * using  an underlying array
+ */
 export default class StringBilder {
   private buffer: Array<string>;
   private bufferIndex = 0;
@@ -44,7 +48,7 @@ export default class StringBilder {
     this.buffer.length = capacity;
   }
 
-  public ensureCapacity(minCapacity: number): void {
+  public ensureCapacity(minCapacity: number) {
     if (minCapacity > 0) {
       if (this.capacity < minCapacity) {
         const newCap = this.calculateCapacity(this.capacity);
@@ -55,6 +59,7 @@ export default class StringBilder {
         }
       }
     }
+    return this.capacity;
   }
 
   public setLenght(len: number) {
@@ -76,18 +81,26 @@ export default class StringBilder {
     }
     this.bufferIndex += text.length;
     this.stringLength += text.length;
+    return this;
   }
 
   public delete(start = 0, end = this.length) {
-    const cntRmv = end - start;
-    for (let i = start; i < end; ++i) {
-      this.buffer[i] = "";
+    if (start > end) {
+      throw new Error('"start" must me smaller than "end"');
+    } else if (start < 0 || end < 0) {
+      throw new Error('"start" and "end" must be positive');
+    } else {
+      const cntRmv = end - start;
+      for (let i = start; i < end; ++i) {
+        this.buffer[i] = "";
+      }
+      for (let i = end; i < this.bufferIndex; ++i) {
+        this.buffer[i - cntRmv] = this.buffer[i];
+      }
+      this.bufferIndex -= cntRmv;
+      this.stringLength -= cntRmv;
+      return this;
     }
-    for (let i = end; i < this.bufferIndex; ++i) {
-      this.buffer[i - cntRmv] = this.buffer[i];
-    }
-    this.bufferIndex -= cntRmv;
-    this.stringLength -= cntRmv;
   }
 
   public charAt(index: number) {
@@ -96,6 +109,7 @@ export default class StringBilder {
 
   public deleteCharAt(index: number) {
     this.delete(index, index + 1);
+    return this;
   }
 
   public indexOf(char: string) {
@@ -134,6 +148,7 @@ export default class StringBilder {
       this.bufferIndex = newSize;
       this.stringLength = newSize;
     }
+    return this;
   }
 
   public reverse() {
@@ -143,6 +158,7 @@ export default class StringBilder {
       this.buffer[i] = this.buffer[symInd];
       this.buffer[symInd] = s;
     }
+    return this;
   }
 
   public setCharAt(index: number, chr: string) {
@@ -151,6 +167,7 @@ export default class StringBilder {
     } else {
       this.buffer[index] = chr;
     }
+    return this;
   }
 
   public substring(index: number) {
