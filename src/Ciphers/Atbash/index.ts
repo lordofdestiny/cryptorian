@@ -1,16 +1,21 @@
-import { isAlpha } from "../../Utils/other";
 import { ProtocolCipher } from "../../AbstractCiphers";
+import StringBilder from "../../Utils/StringBuilder";
 
+/**
+ * Singleton class implementaion for Atbash Cipher
+ */
 export class AtbashCipher extends ProtocolCipher {
-  private initializer: string;
   private cypherMap: Map<string, string>;
+  private static initializer = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   private static instance: AtbashCipher;
   private constructor() {
     super();
-    this.initializer = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     this.cypherMap = this.buildCypher();
   }
 
+  /**
+   * Creates an singleton instance
+   */
   public static getInstance() {
     if (!AtbashCipher.instance) {
       AtbashCipher.instance = new AtbashCipher();
@@ -18,10 +23,13 @@ export class AtbashCipher extends ProtocolCipher {
     return AtbashCipher.instance;
   }
 
+  /**
+   * Creates charachter enctypt/decrpyt mapping
+   */
   private buildCypher() {
     const map = new Map();
 
-    this.initializer.split("").forEach((char, i, arr) => {
+    AtbashCipher.initializer.split("").forEach((char, i, arr) => {
       map.set(char, arr[25 - i]);
     });
 
@@ -29,13 +37,13 @@ export class AtbashCipher extends ProtocolCipher {
   }
 
   public encrypt(text: string) {
-    return text
-      .toUpperCase()
-      .split("")
-      .reduce(
-        (acc, char) => acc + (isAlpha(char) ? this.cypherMap.get(char) : char),
-        ""
-      );
+    const buffer = new StringBilder(text.length);
+    for (let i = 0; i < text.length; ++i) {
+      const char = this.cypherMap.get(text[i].toUpperCase()) || text[i];
+      buffer.append(char);
+    }
+
+    return buffer.toString();
   }
 
   public decrypt(text: string) {
