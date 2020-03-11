@@ -18,7 +18,7 @@ export default class StringBilder {
     } else if (typeof a0 === "string") {
       const bufferCapacity = this.calculateCapacity(a0.length);
       this.buffer = new Array(bufferCapacity);
-      this.copyStrToBuffer(a0, 0);
+      this.copyToBuffer(a0, 0);
       this.stringLength = a0.length;
       this.bufferIndex = a0.length;
     } else {
@@ -30,7 +30,7 @@ export default class StringBilder {
     return 2 * num + 2;
   }
 
-  private copyStrToBuffer(str: string, begin = 0) {
+  private copyToBuffer(str: string | string[], begin = 0) {
     for (let i = 0; i < str.length; ++i) {
       this.buffer[begin + i] = str[i];
     }
@@ -76,9 +76,7 @@ export default class StringBilder {
   public append(value: number | bigint | string | any[] | StringBilder) {
     const text = value.toString();
     this.ensureCapacity(this.length + text.length);
-    for (let i = 0; i < text.length; ++i) {
-      this.buffer[this.bufferIndex + i] = text[i];
-    }
+    this.copyToBuffer(text, this.bufferIndex);
     this.bufferIndex += text.length;
     this.stringLength += text.length;
     return this;
@@ -90,15 +88,12 @@ export default class StringBilder {
     } else if (start < 0 || end < 0) {
       throw new Error('"start" and "end" must be positive');
     } else {
-      const cntRmv = end - start;
-      for (let i = start; i < end; ++i) {
-        this.buffer[i] = "";
+      const removeCount = end - start;
+      for (let i = start; i <= end; ++i) {
+        this.buffer[i] = this.buffer[removeCount + i];
       }
-      for (let i = end; i < this.bufferIndex; ++i) {
-        this.buffer[i - cntRmv] = this.buffer[i];
-      }
-      this.bufferIndex -= cntRmv;
-      this.stringLength -= cntRmv;
+      this.bufferIndex -= removeCount;
+      this.stringLength -= removeCount;
       return this;
     }
   }
@@ -139,12 +134,8 @@ export default class StringBilder {
       throw new Error('"start" and "end" must be positive');
     } else {
       const keep = this.buffer.slice(end, this.bufferIndex);
-      for (let i = 0; i < count; ++i) {
-        this.buffer[start + i] = str[i];
-      }
-      for (let i = 0; i < keep.length; ++i) {
-        this.buffer[end + i] = keep[i];
-      }
+      this.copyToBuffer(str, start);
+      this.copyToBuffer(keep, end);
       this.bufferIndex = newSize;
       this.stringLength = newSize;
     }
