@@ -12,12 +12,12 @@ export const reverseString = function(str: string) {
   return s;
 };
 
-export const isAlpha = (text: string) => !!text.match(/[a-z]/i);
-export const isUpper = (text: string) => !!text.match(/[A-Z]/);
-export const isLower = (text: string) => !!text.match(/[a-z]/);
-export const isNum = (text: string) => !!text.match(/[0-9]/i);
-export const isAlphaNum = (text: string) => !!text.match(/[0-9A-Z]/i);
-export const isWhite = (text: string) => !!text.match(/[\s]/i);
+export const isAlpha = (text: string) => !!text.match(/^[a-z]+$/i);
+export const isUpper = (text: string) => !!text.match(/^[A-Z]+$/);
+export const isLower = (text: string) => !!text.match(/^[a-z]+$/);
+export const isNum = (text: string) => !!text.match(/^[0-9]+$/i);
+export const isAlphaNum = (text: string) => !!text.match(/^[0-9A-Z]+$/i);
+export const isWhite = (text: string) => !!text.match(/[\s]/i); //Check later
 
 //Convert array with diits of base n to decimal number
 export const nBaseArrayToDecimal = function(arr: number[], n = 2) {
