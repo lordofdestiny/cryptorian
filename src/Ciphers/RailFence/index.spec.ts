@@ -1,7 +1,7 @@
 import { RailFenceCipher } from "./index";
 import "../../jestModule";
 
-describe("Rail Fence Cipher tests", () => {
+describe.skip("Rail Fence Cipher tests", () => {
   test.each([[1], [2], "xd"])(
     "Should fail to create instance (%p)",
     (railCount: any) => {
