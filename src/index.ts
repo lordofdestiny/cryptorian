@@ -6,7 +6,8 @@ import { BaconianCipher } from "./Ciphers/Baconian/index";
 import { CeasarCipher } from "./Ciphers/Ceasar/index";
 import { OneTimePad } from "./Ciphers/OTP";
 import { PolybiusCipher } from "./Ciphers/Polybius";
-import { RailFenceCipher } from "./Ciphers/RailFence";
+//import { RailFenceCipher } from "./Ciphers/RailFence";
+import { ROT13Cipher } from "./Ciphers/ROT13";
 
 import * as Random from "./Utils/random";
 
@@ -17,7 +18,8 @@ const Ciphers = {
   CeasarCipher,
   OneTimePad,
   PolybiusCipher,
-  RailFenceCipher
+  //RailFenceCipher
+  ROT13Cipher
 };
 
 const Utils = { Random };
